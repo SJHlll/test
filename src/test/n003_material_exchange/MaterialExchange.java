@@ -38,20 +38,23 @@ public class MaterialExchange {
         System.out.print("비율 c: ");
         int c = scanner.nextInt();
 
+
         // 재료 A, B를 전부 C로 교환하기
-        // 교환비 X:Z가 2:1이고 A가 10개면, 10*1/2 -> C는 5개로 교환됨
-        double AC = A * Z / X;
-        double BC = B * Z / Y;
+        double AC = A * Z / X; // A를 전부 C로 교환하기
+        double BC = B * Z / Y; // B를 전부 C로 교환하기
 
         double CC = AC + BC + C; // A:0, B:0, C로 전부 교환됨
-        
-        // 특정 제품의 제작에 필요한 a:b:c의 비율 계산
-        double XC = (double) X / Z; // C 1개로 A XC개
-        double YC = (double) Y / Z; // C 1개로 B YC개
 
-        double aXC = a / XC; // x에 필요한 C의 개수
-        double bYC = b / YC; // y에 필요한 C의 개수
-        
+
+        // 특정 제품의 제작에 필요한 a:b:c의 비율 계산
+        double XC = (double) X / Z; // C 1개 -> A XC개
+        double YC = (double) Y / Z; // C 1개 -> B YC개
+
+        double aXC = a / XC; // a에 필요한 C의 개수
+        double bYC = b / YC; // b에 필요한 C의 개수
+
+
+        // 제품 만들기
         double tC = aXC + bYC + c; // 제품 1개를 만들 때 필요한 C의 개수
 
         double totalItem = CC / tC; // 총 만들 수 있는 제품의 개수
