@@ -60,8 +60,8 @@ public class MaterialExchange {
         double totalB = totalItem * b; // 총 필요한 재료 B의 개수
         double totalC = totalItem * c; // 총 필요한 재료 C의 개수
 
-        double insertA = totalA / X;
-        double insertB = totalB / Y;
+        double insertA = totalA / X; // A로 교환할 C의 개수
+        double insertB = totalB / Y; // B로 교환할 C의 개수
 
 
 
