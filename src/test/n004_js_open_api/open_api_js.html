@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <script>
+
+        /* Javascript Sample*/
+        var xhr = new XMLHttpRequest();
+        var url = 'http://api.kcisa.kr/openapi/API_CNV_062/request'; /*URL*/
+        var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + '536ca30a-17df-4039-a927-a0ca7bbdf2df'; /*서비스키*/
+        queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('20'); /*세션당 요청레코드수*/
+        queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /*페이지수*/
+        queryParams += '&' + encodeURIComponent('tratNm') + '=' + encodeURIComponent('남산'); /*관광지명(2자이상)*/
+        queryParams += '&' + encodeURIComponent('addr') + '=' + encodeURIComponent('서울'); /*도로명주소 또는 지번주소(2자이상)*/
+        queryParams += '&' + encodeURIComponent('dist') + '=' + encodeURIComponent('10'); /*인접 거리*/
+
+        xhr.open('GET', url + queryParams);
+        xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+
+        console.log('status: ' + this.status);
+        console.log('resultCode: ' + $(this.responseText).find('resultCode').text());
+        console.log('resultMsg: ' + $(this.responseText).find('resultMsg').text());
+
+        var item = $(this.responseText).find('item');
+        $(item).each(function(){
+            
+        console.log("-----");
+        console.log("tratNm = " + $(this).find("tratNm").text());
+        console.log("roadNmAddr = " + $(this).find("roadNmAddr").text());
+        console.log("lotnoAddr = " + $(this).find("lotnoAddr").text());
+        console.log("latPos = " + $(this).find("latPos").text());
+        console.log("lotPos = " + $(this).find("lotPos").text());
+        console.log("tratCn = " + $(this).find("tratCn").text());
+        console.log("prkgPsbltyNum = " + $(this).find("prkgPsbltyNum").text());
+        console.log("tratGdncExpln = " + $(this).find("tratGdncExpln").text());
+        console.log("mngInstNm = " + $(this).find("mngInstNm").text());
+        console.log("mngInstTelno = " + $(this).find("mngInstTelno").text());
+        console.log("dataCrtrYmd = " + $(this).find("dataCrtrYmd").text());
+        console.log("chrgCtpvNm = " + $(this).find("chrgCtpvNm").text());
+        console.log("chrgStatNm = " + $(this).find("chrgStatNm").text());
+        console.log("chrgLatPos = " + $(this).find("chrgLatPos").text());
+        console.log("chrgLotPos = " + $(this).find("chrgLotPos").text());
+        console.log("dist = " + $(this).find("dist").text());
+
+});
+
+};
+
+}
+xhr.send('');
+        
+    </script>
+    
+</body>
+</html>

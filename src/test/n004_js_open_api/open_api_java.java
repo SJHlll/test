@@ -6,7 +6,7 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class open_api {
+public class open_api_java {
 
     public static void main(String[] args) throws IOException {
 

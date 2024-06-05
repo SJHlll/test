@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="tratNm">관광지명:</label>
+        <input type="text" id="tratNm" name="tratNm">
+        <label for="addr">주소:</label>
+        <input type="text" id="addr" name="addr">
+        <button id="searchButton">검색</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        function fetchData(tratNm, addr) {
+            var xhr = new XMLHttpRequest();
+            var url = 'http://api.kcisa.kr/openapi/API_CNV_062/request'; /*URL*/
+            var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + '536ca30a-17df-4039-a927-a0ca7bbdf2df'; /*서비스키*/
+            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('20'); /*세션당 요청레코드수*/
+            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /*페이지수*/
+            queryParams += '&' + encodeURIComponent('tratNm') + '=' + encodeURIComponent(tratNm); /*관광지명(2자이상)*/
+            queryParams += '&' + encodeURIComponent('addr') + '=' + encodeURIComponent(addr); /*도로명주소 또는 지번주소(2자이상)*/
+            queryParams += '&' + encodeURIComponent('dist') + '=' + encodeURIComponent('10'); /*인접 거리*/
+
+            xhr.open('GET', url + queryParams);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    console.log('status: ' + this.status);
+                    console.log('resultCode: ' + $(this.responseText).find('resultCode').text());
+                    console.log('resultMsg: ' + $(this.responseText).find('resultMsg').text());
+
+                    var item = $(this.responseText).find('item');
+                    $('#results').empty(); // 기존 결과 지우기
+                    $(item).each(function() {
+                        var tratNm = $(this).find("tratNm").text();
+                        var roadNmAddr = $(this).find("roadNmAddr").text();
+                        var lotnoAddr = $(this).find("lotnoAddr").text();
+                        var latPos = $(this).find("latPos").text();
+                        var lotPos = $(this).find("lotPos").text();
+                        var tratCn = $(this).find("tratCn").text();
+                        var prkgPsbltyNum = $(this).find("prkgPsbltyNum").text();
+                        var tratGdncExpln = $(this).find("tratGdncExpln").text();
+                        var mngInstNm = $(this).find("mngInstNm").text();
+                        var mngInstTelno = $(this).find("mngInstTelno").text();
+                        var dataCrtrYmd = $(this).find("dataCrtrYmd").text();
+                        var chrgCtpvNm = $(this).find("chrgCtpvNm").text();
+                        var chrgStatNm = $(this).find("chrgStatNm").text();
+                        var chrgLatPos = $(this).find("chrgLatPos").text();
+                        var chrgLotPos = $(this).find("chrgLotPos").text();
+                        var dist = $(this).find("dist").text();
+
+                        var html = `
+                            <div class="item">
+                                <h3>${tratNm}</h3>
+                                <p><strong>도로명 주소:</strong> ${roadNmAddr}</p>
+                                <p><strong>지번 주소:</strong> ${lotnoAddr}</p>
+                                <p><strong>위도:</strong> ${latPos}</p>
+                                <p><strong>경도:</strong> ${lotPos}</p>
+                                <p><strong>관광지 설명:</strong> ${tratCn}</p>
+                                <p><strong>주차 가능 대수:</strong> ${prkgPsbltyNum}</p>
+                                <p><strong>관광지 안내:</strong> ${tratGdncExpln}</p>
+                                <p><strong>관리 기관 이름:</strong> ${mngInstNm}</p>
+                                <p><strong>관리 기관 전화번호:</strong> ${mngInstTelno}</p>
+                                <p><strong>데이터 기준 일자:</strong> ${dataCrtrYmd}</p>
+                                <p><strong>담당 지자체 이름:</strong> ${chrgCtpvNm}</p>
+                                <p><strong>담당 지자체 상태:</strong> ${chrgStatNm}</p>
+                                <p><strong>담당 위도:</strong> ${chrgLatPos}</p>
+                                <p><strong>담당 경도:</strong> ${chrgLotPos}</p>
+                                <p><strong>거리:</strong> ${dist}km</p>
+                            </div>
+                        `;
+                        $("#results").append(html);
+                    });
+                }
+            };
+            xhr.send('');
+        }
+
+        $(document).ready(function() {
+            function performSearch() {
+                var tratNm = $("#tratNm").val();
+                var addr = $("#addr").val();
+                fetchData(tratNm, addr);
+            }
+
+            $("#searchButton").click(performSearch);
+
+            $("#tratNm, #addr").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
